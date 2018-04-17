@@ -6,30 +6,29 @@
 #
 
 # 1. CHECK IF .ENV FILE EXISTS
-if [ -e .env ]; then
-    source .env
-else 
-    echo "Please set up your .env file before starting your enviornment."
-    exit 1
-fi
+#if [ -e .env ]; then
+#    source .env
+#else
+#    echo "Please set up your .env file before starting your enviornment."
+#    exit 1
+#fi
 
-# 2. CREATE NETWORK
+
+#CREATE NETWORK
 docker network create $NETWORK
 
-# 3. Verify if second network is configured
+#VERIFY SECOND NETWORK
 if [ ! -z ${SERVICE_NETWORK+X} ]; then
     docker network create $SERVICE_NETWORK
 fi
 
-# 4. Download the latest version of nginx.tmpl
+# DOWNLOAD NGINX TMPLATE
 curl https://raw.githubusercontent.com/jwilder/nginx-proxy/master/nginx.tmpl > nginx.tmpl
 
 # 5. Update local images
-docker-compose pull
+#docker-compose pull
 
-# 6. Add any special configuration if it's set in .env file
-
-# Check if user set to use Special Conf Files
+# 6. Add any special configuration if it's set in .env file # Check if user set to use Special Conf Files
 if [ ! -z ${USE_NGINX_CONF_FILES+X} ] && [ "$USE_NGINX_CONF_FILES" = true ]; then
 
     # Create the conf folder if it does not exists
@@ -56,9 +55,7 @@ if [ ! -z ${USE_NGINX_CONF_FILES+X} ] && [ "$USE_NGINX_CONF_FILES" = true ]; the
     fi
 fi 
 
-# 7. Start proxy
-
-# Check if you have multiple network
+# START DOCKER COMPOSE NETWORK CHECK :
 if [ -z ${SERVICE_NETWORK+X} ]; then
     docker-compose up -d
 else
